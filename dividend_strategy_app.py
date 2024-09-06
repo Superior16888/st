@@ -78,7 +78,7 @@ if st.button('進行分析'):
         result = analyze_dividend_strategy(symbol, before_days, after_days, dividend_tax_rate, years)
     
     if result[0] is None:
-        st.error(f"警告：在指定的{years}年內沒有找到可分析的除息事件")
+        st.error(f"警告：資料抓取錯誤或在指定的{years}年內沒有找到可分析的除息事件")
     else:
         avg_return, event_count, detailed_returns = result
         
