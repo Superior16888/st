@@ -4,12 +4,22 @@ import io
 import pandas as pd
 import numpy as np
 import plotly.express as px
+from datetime import datetime, timedelta
 
 st.title("Monthly Revenue Analysis")
 
-# Input for year and month
-year = st.slider("Select Year", 100, 121, 112)
-month = st.slider("Select Month", 1, 12, 7)
+# Get the current date and subtract one month
+today = datetime.today()
+first_day_of_this_month = today.replace(day=1)
+previous_month_date = first_day_of_this_month - timedelta(days=1)
+
+# Extract the default year and month (Minguo year)
+default_year = previous_month_date.year - 1911  # Convert to Minguo year
+default_month = previous_month_date.month
+
+# Input for year and month with default values
+year = st.slider("Select Year", 100, 121, default_year)
+month = st.slider("Select Month", 1, 12, default_month)
 
 def monthly_revenue(year, month):
     url = "https://mops.twse.com.tw/server-java/FileDownLoad" 
@@ -57,3 +67,4 @@ fig.update_traces(textfont_size=16)
 
 # Display the Plotly treemap
 st.plotly_chart(fig)
+
