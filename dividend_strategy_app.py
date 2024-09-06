@@ -103,4 +103,4 @@ if st.button('進行分析'):
             {'除息日': [date for date, _ in detailed_returns],
              '回報率': [return_value for _, return_value in detailed_returns]}
         )
-        st.bar_chart(chart_data.set_index('日期'))
+        st.bar_chart(chart_data.set_index('除息日'))
