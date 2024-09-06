@@ -46,8 +46,8 @@ def analyze_dividend_strategy(symbol, before_days, after_days, dividend_tax_rate
         buy_date = buy_dates[-1]
         sell_date = sell_dates[0]
         
-        buy_price = data.loc[buy_date, 'Close']
-        sell_price = data.loc[sell_date, 'Close']
+        buy_price = data.loc[buy_date, 'Adj Close']
+        sell_price = data.loc[sell_date, 'Adj Close']
         
         buy_cost = buy_price * (1 + transaction_fee_rate)
         sell_proceeds = sell_price * (1 - transaction_fee_rate - transaction_tax_rate)
