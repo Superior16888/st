@@ -67,7 +67,7 @@ def analyze_dividend_strategy(symbol, before_days, after_days, dividend_tax_rate
 
 st.title('股票除息策略分析')
 
-symbol = st.text_input('輸入股票代碼 (例如: 2330.TW)', '2330.TW')
+symbol = st.text_input('輸入股票代碼，上市股票加.TW;上櫃加.TWO (例如: 2330.TW 或 00720B.TWO)', '2330.TW')
 before_days = st.number_input('除息日前幾天買入', min_value=1, value=20)
 after_days = st.number_input('除息日後幾天賣出', min_value=1, value=20)
 dividend_tax_rate = st.number_input('股息稅率 (%)', min_value=0, max_value=100, value=8) / 100
@@ -98,7 +98,7 @@ if st.button('進行分析'):
         df['回報率'] = df['回報率'].apply(lambda x: f"{x:.2%}")
         st.dataframe(df)
         
-        st.subheader('歷史總報酬率')
+        st.subheader(f'{symbol}除息策略歷史總報酬率')
         chart_data = pd.DataFrame(
             {'除息日': [date for date, _ in detailed_returns],
              '回報率': [return_value for _, return_value in detailed_returns]}
