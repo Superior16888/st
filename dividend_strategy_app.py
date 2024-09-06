@@ -93,14 +93,14 @@ if st.button('進行分析'):
         st.write(f"分析的除息事件數量: {event_count}")
         
         st.subheader('詳細回報率:')
-        df = pd.DataFrame(detailed_returns, columns=['日期', '回報率'])
-        df['日期'] = df['日期'].dt.strftime('%Y-%m-%d')
+        df = pd.DataFrame(detailed_returns, columns=['除息日', '回報率'])
+        df['除息日'] = df['除息日'].dt.strftime('%Y-%m-%d')
         df['回報率'] = df['回報率'].apply(lambda x: f"{x:.2%}")
         st.dataframe(df)
         
         st.subheader('歷史總報酬率')
         chart_data = pd.DataFrame(
-            {'日期': [date for date, _ in detailed_returns],
+            {'除息日': [date for date, _ in detailed_returns],
              '回報率': [return_value for _, return_value in detailed_returns]}
         )
         st.bar_chart(chart_data.set_index('日期'))
