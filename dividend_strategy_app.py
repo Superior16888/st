@@ -98,7 +98,7 @@ if st.button('進行分析'):
         df['回報率'] = df['回報率'].apply(lambda x: f"{x:.2%}")
         st.dataframe(df)
         
-        st.subheader(f'{symbol}除息策略歷史總報酬率')
+        st.subheader('除息策略歷史總報酬率')
         chart_data = pd.DataFrame(
             {'除息日': [date for date, _ in detailed_returns],
              '回報率': [return_value for _, return_value in detailed_returns]}
