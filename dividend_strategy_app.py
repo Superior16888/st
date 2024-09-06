@@ -83,6 +83,14 @@ if st.button('進行分析'):
         avg_return, event_count, detailed_returns = result
         
         st.success('分析完成！')
+
+        st.subheader('除息策略歷史總報酬率')
+        chart_data = pd.DataFrame(
+            {'除息日': [date for date, _ in detailed_returns],
+             '回報率': [return_value for _, return_value in detailed_returns]}
+        )
+        st.bar_chart(chart_data.set_index('除息日'))
+  
         st.write(f"股票代碼: {symbol}")
         st.write(f"分析策略: 除息日前{before_days}天買入，除息日後{after_days}天賣出")
         st.write(f"股息稅率: {dividend_tax_rate*100:.1f}%")
@@ -98,9 +106,4 @@ if st.button('進行分析'):
         df['回報率'] = df['回報率'].apply(lambda x: f"{x:.2%}")
         st.dataframe(df)
         
-        st.subheader('除息策略歷史總報酬率')
-        chart_data = pd.DataFrame(
-            {'除息日': [date for date, _ in detailed_returns],
-             '回報率': [return_value for _, return_value in detailed_returns]}
-        )
-        st.bar_chart(chart_data.set_index('除息日'))
+
