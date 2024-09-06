@@ -65,7 +65,7 @@ def analyze_dividend_strategy(symbol, before_days, after_days, dividend_tax_rate
     avg_return = sum(return_value for _, return_value in returns) / len(returns)
     return avg_return, len(returns), returns
 
-st.title('股票除息策略分析')
+st.write('股票除息策略分析')
 
 symbol = st.text_input('輸入股票代碼，上市股票加.TW;上櫃加.TWO (例如: 2330.TW 或 00720B.TWO)', '2330.TW')
 before_days = st.number_input('除息日前幾天買入', min_value=1, value=20)
