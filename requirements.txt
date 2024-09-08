@@ -2,3 +2,4 @@ yfinance==0.2.31
 plotly==5.14.1
 quantstats==0.0.62
 IPython
+numpy==1.21.0
