@@ -3,6 +3,7 @@ import quantstats as qs
 import streamlit as st
 import datetime
 import warnings
+import pandas as pd
 
 # Suppress warnings
 warnings.filterwarnings("ignore")
@@ -41,26 +42,31 @@ if st.button('Generate Report'):
     # Download stock and benchmark data
     if stock_symbol and benchmark_symbol:
         st.write(f"Fetching data for {stock_symbol} from {start_date} to {end_date}...")
-        data = yf.download(stock_symbol, start=start_date, end=end_date)
-        
-        if not data.empty:
-            # Calculate the daily returns
-            returns = data["Adj Close"].pct_change().dropna()
-
-            # Generate QuantStats report
-            st.write(f"Generating report for {stock_symbol}...")
-
-            # Save the QuantStats report to an HTML file
-            report_file = "quantstats-tearsheet.html"
-            qs.reports.html(returns, benchmark=benchmark_symbol, output=report_file, title="QuantStats Report")
-
-            # Read the HTML file and display it in the Streamlit app
-            with open(report_file, "r", encoding="utf-8") as file:
-                report_html = file.read()
-
-            # Center the QuantStats report using a div with 'centered' class
-            st.markdown('<div class="centered">', unsafe_allow_html=True)
-            st.components.v1.html(report_html, width=1200, height=6000, scrolling=True)
-            st.markdown('</div>', unsafe_allow_html=True)
-        else:
-            st.write(f"No data found for {stock_symbol}. Please check the symbol and try again.")
+        try:
+            # Disable progress bar in yfinance
+            yf.pdr_override()
+            data = yf.download(stock_symbol, start=start_date, end=end_date, progress=False)
+            
+            if not data.empty:
+                # Calculate the daily returns
+                returns = data["Adj Close"].pct_change().dropna()
+                
+                # Generate QuantStats report
+                st.write(f"Generating report for {stock_symbol}...")
+                # Save the QuantStats report to an HTML file
+                report_file = "quantstats-tearsheet.html"
+                qs.reports.html(returns, benchmark=benchmark_symbol, output=report_file, title="QuantStats Report")
+                
+                # Read the HTML file and display it in the Streamlit app
+                with open(report_file, "r", encoding="utf-8") as file:
+                    report_html = file.read()
+                
+                # Center the QuantStats report using a div with 'centered' class
+                st.markdown('<div class="centered">', unsafe_allow_html=True)
+                st.components.v1.html(report_html, width=1200, height=6000, scrolling=True)
+                st.markdown('</div>', unsafe_allow_html=True)
+            else:
+                st.write(f"No data found for {stock_symbol}. Please check the symbol and try again.")
+        except Exception as e:
+            st.error(f"An error occurred: {str(e)}")
+            st.write("Please try again with a different stock symbol or date range.")
