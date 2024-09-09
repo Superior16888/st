@@ -1,7 +1,9 @@
-streamlit==1.22.0
-yfinance==0.2.18
-quantstats==0.0.59
-pandas==1.5.3
-numpy==1.23.5
-matplotlib==3.7.1
-seaborn==0.12.2
+streamlit==1.31.1
+yfinance==0.2.35
+quantstats==0.0.62
+pandas==2.1.4
+numpy==1.26.3
+matplotlib==3.8.2
+seaborn==0.13.1
+setuptools==69.0.3
+wheel==0.42.0
