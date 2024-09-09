@@ -4,24 +4,13 @@ import streamlit as st
 import datetime
 import warnings
 import pandas as pd
+import base64
 
 # Suppress warnings
 warnings.filterwarnings("ignore")
 
 # Set the Streamlit app layout to wide mode for better alignment
 st.set_page_config(layout="wide")
-
-# Inject custom CSS to center the report
-st.markdown(
-    """
-    <style>
-    .centered {
-        display: flex;
-        justify-content: center;
-    }
-    </style>
-    """, unsafe_allow_html=True
-)
 
 # Streamlit App title
 st.title("Stock Performance Analysis with QuantStats")
@@ -32,6 +21,13 @@ benchmark_symbol = st.text_input("Enter the benchmark symbol (e.g., ^TWII for Ta
 
 # Input for number of years
 years = st.number_input("Enter the number of years of historical data", min_value=1, max_value=20, value=10)
+
+def get_binary_file_downloader_html(bin_file, file_label='File'):
+    with open(bin_file, 'rb') as f:
+        data = f.read()
+    bin_str = base64.b64encode(data).decode()
+    href = f'<a href="data:application/octet-stream;base64,{bin_str}" download="{file_label}">Download {file_label}</a>'
+    return href
 
 # Button to trigger the report generation
 if st.button('Generate Report'):
@@ -54,17 +50,13 @@ if st.button('Generate Report'):
                 # Generate QuantStats report
                 st.write(f"Generating report for {stock_symbol}...")
                 # Save the QuantStats report to an HTML file
-                report_file = "quantstats-tearsheet.html"
-                qs.reports.html(returns, benchmark=benchmark_symbol, output=report_file, title="QuantStats Report")
+                report_file = f"{stock_symbol}_quantstats_report.html"
+                qs.reports.html(returns, benchmark=benchmark_symbol, output=report_file, title=f"QuantStats Report - {stock_symbol}")
                 
-                # Read the HTML file and display it in the Streamlit app
-                with open(report_file, "r", encoding="utf-8") as file:
-                    report_html = file.read()
+                # Provide download link
+                st.markdown(get_binary_file_downloader_html(report_file, f'{stock_symbol}_report.html'), unsafe_allow_html=True)
                 
-                # Center the QuantStats report using a div with 'centered' class
-                st.markdown('<div class="centered">', unsafe_allow_html=True)
-                st.components.v1.html(report_html, width=1200, height=6000, scrolling=True)
-                st.markdown('</div>', unsafe_allow_html=True)
+                st.success("Report generated successfully. Click the link above to download.")
             else:
                 st.write(f"No data found for {stock_symbol}. Please check the symbol and try again.")
         except Exception as e:
