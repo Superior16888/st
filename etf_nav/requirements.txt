@@ -1,3 +1,4 @@
+Streamlit
 undetected-chromedriver==3.1.2
 selenium==4.17.0
 pandas==2.1.0
