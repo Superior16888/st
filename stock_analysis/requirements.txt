@@ -7,3 +7,5 @@ matplotlib==3.8.2
 seaborn==0.13.1
 setuptools==69.0.3
 wheel==0.42.0
+IPython==8.20.0
+jupyter==1.0.0
