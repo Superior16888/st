@@ -42,7 +42,7 @@ if st.button('Generate Report'):
             # Disable progress bar in yfinance
             yf.pdr_override()
             data = yf.download(stock_symbol, start=start_date, end=end_date, progress=False)
-            benchmark_data = yf.download(benchmark_symbol, start=start_date, end=end_date
+            benchmark_data = yf.download(benchmark_symbol, start=start_date, end=end_date, progress=False)
                                          
             if not data.empty:
                 # Calculate the daily returns
