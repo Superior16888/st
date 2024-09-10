@@ -53,7 +53,7 @@ if st.button('Generate Report'):
 
             # Save the QuantStats report to an HTML file
             report_file = "quantstats-tearsheet.html"
-                qs.reports.html(
+            qs.reports.html(
                 returns, 
                 benchmark=benchmark_returns, 
                 output=report_file, 
