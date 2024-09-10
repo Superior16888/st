@@ -42,16 +42,17 @@ if st.button('Generate Report'):
             # Disable progress bar in yfinance
             yf.pdr_override()
             data = yf.download(stock_symbol, start=start_date, end=end_date, progress=False)
-            
+            benchmark_data = yf.download(benchmark_symbol, start=start_date, end=end_date
+                                         
             if not data.empty:
                 # Calculate the daily returns
                 returns = data["Adj Close"].pct_change().dropna()
-                
+                benchmark_returns = benchmark_data["Adj Close"].pct_change().dropna() 
                 # Generate QuantStats report
                 st.write(f"Generating report for {stock_symbol}...")
                 # Save the QuantStats report to an HTML file
                 report_file = f"{stock_symbol}_quantstats_report.html"
-                qs.reports.html(returns, benchmark=benchmark_symbol, output=report_file, title=f"QuantStats Report - {stock_symbol}")
+                qs.reports.html(returns, benchmark=benchmark_returns, output=report_file, title=f"{stock_symbol} 績效報告" ,benchmark_title=f"{benchmark_symbol}")
                 
                 # Provide download link
                 st.markdown(get_binary_file_downloader_html(report_file, f'{stock_symbol}_report.html'), unsafe_allow_html=True)
