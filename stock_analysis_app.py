@@ -42,17 +42,18 @@ if st.button('Generate Report'):
     if stock_symbol and benchmark_symbol:
         st.write(f"Fetching data for {stock_symbol} from {start_date} to {end_date}...")
         data = yf.download(stock_symbol, start=start_date, end=end_date)
+        benchmark_data = yf.download(benchmark_symbol, start=start_date, end=end_date)
         
         if not data.empty:
             # Calculate the daily returns
             returns = data["Adj Close"].pct_change().dropna()
-
+            benchmark_returns = benchmark_data["Adj Close"].pct_change().dropna() 
             # Generate QuantStats report
             st.write(f"Generating report for {stock_symbol}...")
 
             # Save the QuantStats report to an HTML file
             report_file = "quantstats-tearsheet.html"
-            qs.reports.html(returns, benchmark=benchmark_symbol, output=report_file, title="QuantStats Report")
+            qs.reports.html(returns, benchmark=benchmark_returns, output=report_file, f"{stock_symbol} 績效報告",benchmark_title=f"{benchmark_symbol}")
 
             # Read the HTML file and display it in the Streamlit app
             with open(report_file, "r", encoding="utf-8") as file:
