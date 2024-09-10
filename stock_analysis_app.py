@@ -53,8 +53,13 @@ if st.button('Generate Report'):
 
             # Save the QuantStats report to an HTML file
             report_file = "quantstats-tearsheet.html"
-            qs.reports.html(returns, benchmark=benchmark_returns, output=report_file, f"{stock_symbol} 績效報告",benchmark_title=f"{benchmark_symbol}")
-
+                qs.reports.html(
+                returns, 
+                benchmark=benchmark_returns, 
+                output=report_file, 
+                title=f"{stock_symbol} 績效報告", 
+                benchmark_title=f"{benchmark_symbol}"
+            )
             # Read the HTML file and display it in the Streamlit app
             with open(report_file, "r", encoding="utf-8") as file:
                 report_html = file.read()
