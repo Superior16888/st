@@ -40,7 +40,7 @@ if st.button('Generate Report'):
         st.write(f"Fetching data for {stock_symbol} from {start_date} to {end_date}...")
         try:
             # Disable progress bar in yfinance
-            yf.pdr_override()
+            #yf.pdr_override()
             data = yf.download(stock_symbol, start=start_date, end=end_date, progress=False)
             benchmark_data = yf.download(benchmark_symbol, start=start_date, end=end_date, progress=False)
                                          
