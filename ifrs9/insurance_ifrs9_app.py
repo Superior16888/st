@@ -1,8 +1,6 @@
 import streamlit as st
 import numpy as np
-import yfinance as yf
 import pandas as pd
-import quantstats as qs
 import datetime
 import warnings
 warnings.filterwarnings("ignore")
