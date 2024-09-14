@@ -1,1 +1,1 @@
-empyrical
+empyrical==0.5.3
