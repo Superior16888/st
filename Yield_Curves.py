@@ -4,12 +4,14 @@ import plotly.graph_objects as go
 import pandas as pd
 from datetime import datetime, timedelta
 
+# Function to fetch yield data from Yahoo Finance
 def fetch_yield_data(start_date, end_date):
     tickers = ['^IRX', '^FVX', '^TNX', '^TYX']  # 3-month, 5-year, 10-year, 30-year yields
     yields = yf.download(tickers, start=start_date, end=end_date)['Adj Close']
     desired_order = ['^IRX', '^FVX', '^TNX', '^TYX']
     return yields[desired_order]
 
+# Function to create the yield curve plot
 def create_yield_curve_plot(yields, days_ago):
     maturities = ['3M', '5Y', '10Y', '30Y']
     current_yields = yields.iloc[-1].values
@@ -45,6 +47,7 @@ def create_yield_curve_plot(yields, days_ago):
 
     return fig
 
+# Streamlit app starts here
 st.title('美債殖利率變動')
 
 # Automatically set the date range for the past year
@@ -65,8 +68,8 @@ if not yields.empty:
     fig = create_yield_curve_plot(yields, days_ago)
     st.plotly_chart(fig)
     
-    # Display the yield data as a dataframe below the chart
-    st.subheader("殖利率")
-    st.dataframe(yields)
+    # Display the yield data with reversed index
+    st.subheader("殖利率 (倒序)")
+    st.dataframe(yields.iloc[::-1])  # Reverse the index of the DataFrame
 else:
     st.error("無資料.")
