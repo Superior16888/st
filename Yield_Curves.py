@@ -61,7 +61,7 @@ yields = fetch_yield_data(start_date, end_date)
 days_difference = (yields.index[-1] - yields.index[0]).days
 
 # Number of days ago selection, with the maximum value capped by the data range
-days_ago = st.slider("距今日之交易日數", min_value=1, max_value=min(days_difference, 750), value=2)
+days_ago = st.slider("距今日之交易日數", min_value=1, max_value=min(days_difference, 750), value=1)
 
 # Create and display the yield curve plot
 if not yields.empty:
