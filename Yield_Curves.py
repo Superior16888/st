@@ -7,9 +7,13 @@ from datetime import datetime, timedelta
 # Function to fetch yield data from Yahoo Finance
 def fetch_yield_data(start_date, end_date):
     tickers = ['^IRX', '^FVX', '^TNX', '^TYX']  # 3-month, 5-year, 10-year, 30-year yields
-    yields = yf.download(tickers, start=start_date, end=end_date)['Adj Close']
-    desired_order = ['^IRX', '^FVX', '^TNX', '^TYX']
-    return yields[desired_order]
+    try:
+        yields = yf.download(tickers, start=start_date, end=end_date)['Close']
+        desired_order = ['^IRX', '^FVX', '^TNX', '^TYX']
+        return yields[desired_order]
+    except Exception as e:
+        st.error(f"Error fetching data: {str(e)}")
+        return pd.DataFrame()
 
 # Function to create the yield curve plot
 def create_yield_curve_plot(yields, days_ago):
@@ -57,6 +61,11 @@ start_date = end_date - timedelta(days=365*3)
 # Fetch the yield data
 yields = fetch_yield_data(start_date, end_date)
 
+# Check if yields is empty before proceeding
+if yields.empty:
+    st.error("無資料.")
+    st.stop()  # Stop further execution
+
 # Calculate the difference in days between the first and last date
 days_difference = (yields.index[-1] - yields.index[0]).days
 
@@ -64,12 +73,9 @@ days_difference = (yields.index[-1] - yields.index[0]).days
 days_ago = st.slider("距今日之交易日數", min_value=1, max_value=min(days_difference, 750), value=1)
 
 # Create and display the yield curve plot
-if not yields.empty:
-    fig = create_yield_curve_plot(yields, days_ago)
-    st.plotly_chart(fig)
-    
-    # Display the yield data with reversed index
-    st.subheader("殖利率 (倒序)")
-    st.dataframe(yields.iloc[::-1])  # Reverse the index of the DataFrame
-else:
-    st.error("無資料.")
+fig = create_yield_curve_plot(yields, days_ago)
+st.plotly_chart(fig)
+
+# Display the yield data with reversed index
+st.subheader("殖利率 (倒序)")
+st.dataframe(yields.iloc[::-1])  # Reverse the index of the DataFrame
